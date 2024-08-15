@@ -7,7 +7,7 @@ public abstract class Platform :MonoBehaviour
     protected Rigidbody PlatformRb { get; set; }
     protected Collider PlatformCollider { get; set; }
 
-    [Header("Platform")]
+    [Header("DefaultPlatform")]
     [SerializeField]
     Vector3 initPlatformPos;
 

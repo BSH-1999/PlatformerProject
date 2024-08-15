@@ -7,9 +7,9 @@ public class PlatformMoving : Platform
 {
     WaitForSeconds WaitForTrable;
 
-    [Header("PlatformMoving")]
-    public Vector3 trablePos;
-    private Vector3 trableTargetPos;
+    [Header("Moving")]
+    public Vector3 trablePos; //이동 위치
+    private Vector3 trableTargetPos; //현재 이동 타겟
 
     private const float trableWatingTime = 2.0f;
     private const float trableSpeed = 0.5f;
