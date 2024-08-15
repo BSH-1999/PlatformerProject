@@ -8,10 +8,11 @@ public class HealthUI : MonoBehaviour
     public int pieceCount = 3;
     public float currentHealth = 3;
     public float distance = 120.0f;
-    public bool bTest;
+    public bool bDebug = false;
 
     public GameObject healthPiece;
 
+    private float maxHealth = 3;
     private List<HealthPiece> healthPieces = new List<HealthPiece>();
 
     // Start is called before the first frame update
@@ -23,7 +24,7 @@ public class HealthUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(bTest == true)
+        if(bDebug == true)
             UpdateCurrentHealth();
     }
 
@@ -45,7 +46,7 @@ public class HealthUI : MonoBehaviour
 
     void UpdateCurrentHealth()
     {
-        float current = currentHealth;
+        float current = Mathf.Clamp(currentHealth, 0, maxHealth);
         for (int i = 0; i < pieceCount; i++)
         {
             current -= 1;
