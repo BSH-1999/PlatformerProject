@@ -5,11 +5,11 @@ using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class MyPiUI : MonoBehaviour
+public class PiUI : MonoBehaviour
 {
     public int pieceCount = 4;
     public GameObject piPiece;
-    private List<MyPiPiece> piPieces = new List<MyPiPiece>();
+    private List<PiPiece> piPieces = new List<PiPiece>();
 
     // Start is called before the first frame update
     void Start()
@@ -22,7 +22,7 @@ public class MyPiUI : MonoBehaviour
     {
         UpdateUIScale();
 
-        foreach (MyPiPiece pi in piPieces)
+        foreach (PiPiece pi in piPieces)
         {
             if (pi.gameObject.activeInHierarchy)
             {
@@ -37,7 +37,7 @@ public class MyPiUI : MonoBehaviour
         for (int i = 0; i < pieceCount; i++)
         {
             float z = 360.0f / pieceCount * i;
-            MyPiPiece piece = piPiece.GetComponent<MyPiPiece>();
+            PiPiece piece = piPiece.GetComponent<PiPiece>();
             piece = Instantiate(piece);
             piece.transform.SetParent(transform);
             piece.Init();

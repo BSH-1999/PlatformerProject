@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MyPiPiece : MonoBehaviour
+public class PiPiece : MonoBehaviour
 {
     Image thisImage;
 
