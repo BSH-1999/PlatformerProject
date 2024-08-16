@@ -7,41 +7,50 @@ using UnityEngine;
 public class PlatformWeightInfluenced : Platform
 {
     [Header("WeightInflueneced")]
-    float maxFallYpos = 5.0f;
-    float fallingSpeed = 3.0f;  
+    const float maxFallYpos = 5.0f;
+    const float fallingSpeed = 3.0f;
+    const float minRideTime = 1.0f;
+
+    [SerializeField]
+    float rideTime;
+    [SerializeField]
     bool isGetOnPlatform = false;
+    [SerializeField]
+    bool isRunToGetOnEvent = false;
+   
 
 
     protected override IEnumerator GetOnEvent()
     {
-        float stayTime = 0.0f;
-        while (isGetOnPlatform || Time.deltaTime != 1f)
+        isRunToGetOnEvent = true;
+        rideTime = 0;
+
+        while (isGetOnPlatform)
         {
             yield return null;
-            stayTime += Time.deltaTime;
+            rideTime += Time.deltaTime;
             transform.Translate(Vector3.down * Time.deltaTime * fallingSpeed);
-            if (transform.position.y <= InitPlatformPos.y - maxFallYpos) { stayTime = 0; break; }
+            if (transform.position.y <= InitPlatformPos.y - maxFallYpos) { break; }
         }
 
-        while(!isGetOnPlatform || Time.deltaTime != 1)
+        while (!isGetOnPlatform)
         {
             yield return null;
-            stayTime += Time.deltaTime;
-
             transform.Translate(Vector3.up * Time.deltaTime * fallingSpeed);
-            if(transform.position.y >= InitPlatformPos.y) { stayTime = 0; break; }
-        }
+            if(transform.position.y >= InitPlatformPos.y) { break; }
+        }   
+
+        isRunToGetOnEvent = false;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         isGetOnPlatform = true;
-
-        StartCoroutine(GetOnEvent());
+        if (!isRunToGetOnEvent)  StartCoroutine(GetOnEvent());
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        isGetOnPlatform = false;
+        if(rideTime > 1)  isGetOnPlatform = false;
     }
 }
