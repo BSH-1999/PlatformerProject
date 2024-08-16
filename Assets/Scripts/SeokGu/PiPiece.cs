@@ -2,32 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static PiUI;
 
 public class PiPiece : MonoBehaviour
 {
-    Image thisImage;
+    public GameObject itemPiecePrefab;
 
-    public GameObject itemPiece;
+    private Image thisImage;
+    private GameObject equipUiPrefab;
+    private ItemPiece itemPiece;
+    private EquipUI equipUI;
 
     private float angleRange;
-    private bool select = false;
+    private bool bSelect = false;
+    private bool bData = false;
 
-    void Start()
+    void Awake()
     {
-
+        Init();
     }
 
     public void Init()
     {
         thisImage = GetComponent<Image>();
+        equipUiPrefab = GameObject.Find("EquipUI");
+        equipUI = equipUiPrefab.GetComponent<EquipUI>();
 
-        ItemPiece piece = itemPiece.GetComponent<ItemPiece>();
-        piece.Init();
+        itemPiece = itemPiecePrefab.GetComponent<ItemPiece>();
+        itemPiece = Instantiate(itemPiece);
+        itemPiece.transform.SetParent(transform);
     }
 
-    public void SetData()
+    public void SetData(PiData piData)
     {
-
+        itemPiece.itemIcon.sprite = piData.imageSprite;
+        itemPiece.itemIcon.color = new Color(1, 1, 1, 1);
+        bData = true;
     }
 
     public void SetImageFillAmount(float Amount)
@@ -37,8 +47,14 @@ public class PiPiece : MonoBehaviour
 
     public void SetUIRotation(Vector3 Rotation)
     {
-        Quaternion rotation = Quaternion.Euler(Rotation);
-        transform.SetLocalPositionAndRotation(new Vector3(0,0,0), rotation);
+        Quaternion piRotation = Quaternion.Euler(Rotation);
+        transform.SetLocalPositionAndRotation(new Vector3(0,0,0), piRotation);
+
+        Vector3 itemPosition = new Vector3(-13, 31, 0);
+        Vector3 itemRotation = new Vector3(0, 0, -Rotation.z);
+        Vector3 itemScale = new Vector3(0.2f, 0.2f, 1);
+        itemPiece.transform.SetLocalPositionAndRotation(itemPosition, Quaternion.Euler(itemRotation));
+        itemPiece.transform.localScale = itemScale;
     }
 
     public void SetAngleRange(float InAngleRange)
@@ -54,15 +70,21 @@ public class PiPiece : MonoBehaviour
         float angle = ((Mathf.Atan2(temp.y, temp.x) * Mathf.Rad2Deg) + 270) % 360;
         if (angle >= transform.rotation.eulerAngles.z && angle < transform.rotation.eulerAngles.z + angleRange)
         {
-            transform.localScale = new Vector3(2, 2, 2);
-            select = true;
+            transform.localScale = new Vector3(2.5f, 2.5f, 1);
+            bSelect = true;
         }
         else
         {
-            transform.localScale = new Vector3(1, 1, 1);
-            select = false;
+            transform.localScale = new Vector3(2, 2, 1);
+            bSelect = false;
         }
     }
 
-    public bool IsSelected() { return select; }
+    public void OnClicked()
+    {
+        equipUI.ChangeIcon(itemPiece.itemIcon.sprite);
+    }
+
+    public bool IsSelected() { return bSelect; }
+    public bool IsData() { return bData; }
 }

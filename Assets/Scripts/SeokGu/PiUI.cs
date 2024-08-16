@@ -44,13 +44,16 @@ public class PiUI : MonoBehaviour
             PiPiece piece = piPiece.GetComponent<PiPiece>();
             piece = Instantiate(piece);
             piece.transform.SetParent(transform);
-            piece.Init();
+
             piece.SetUIRotation(new Vector3(0, 0, z));
             piece.SetAngleRange(360.0f / pieceCount);
 
             float amount = 1.0f / pieceCount;
             piece.SetImageFillAmount(amount);
             piPieces.Add(piece);
+
+            if (i < piDatas.Length)
+                piece.SetData(piDatas[i]);
         }
     }
 
@@ -61,7 +64,7 @@ public class PiUI : MonoBehaviour
 
     void SelectPiece(int InPiPieceNum)
     {
-        Debug.Log(InPiPieceNum);
+        piPieces[InPiPieceNum].OnClicked();
     }
 
     [System.Serializable]

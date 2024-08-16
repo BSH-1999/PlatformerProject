@@ -36,7 +36,6 @@ public class HealthUI : MonoBehaviour
             HealthPiece piece = healthPiece.GetComponent<HealthPiece>();
             piece = Instantiate(piece);
             piece.transform.SetParent(transform);
-            piece.Init();
             piece.SetUIPosition(new Vector3(distance * i, 0, 0));
             piece.SetImageFillAmount(1.0f);
 

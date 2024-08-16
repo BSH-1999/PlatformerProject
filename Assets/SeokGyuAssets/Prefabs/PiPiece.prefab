@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 981454307994741390}
   - component: {fileID: 1444258853583378476}
   m_Layer: 5
-  m_Name: PiPiecePrefab
+  m_Name: PiPiece
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.101960786}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -88,4 +88,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a421c3295d387734888d263153d2806d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPiece: {fileID: 4576882748651498507, guid: 96f7d5820836f5848898155bd81406ba, type: 3}
+  itemPiecePrefab: {fileID: 4576882748651498507, guid: 96f7d5820836f5848898155bd81406ba, type: 3}

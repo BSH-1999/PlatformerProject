@@ -6,19 +6,12 @@ using UnityEngine.UI;
 public class ItemPiece : MonoBehaviour
 {
     public Image itemIcon;
-
-    void Start()
+    void Awake()
     {
-        
+        Init();
     }
-
     public void Init()
     {
         itemIcon = GetComponentInChildren<Image>();
-    }
-
-    void Update()
-    {
-        
     }
 }

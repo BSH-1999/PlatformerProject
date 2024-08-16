@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public class HealthPiece : MonoBehaviour
 {
-    Image thisImage;
+    private Image thisImage;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        Init();
     }
 
     public void Init()
@@ -21,7 +21,6 @@ public class HealthPiece : MonoBehaviour
 
     public void SetImageFillAmount(float Amount)
     {
-        Debug.Log(Amount);
         thisImage.fillAmount = Amount;
     }
 
