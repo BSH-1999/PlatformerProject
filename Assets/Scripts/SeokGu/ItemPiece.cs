@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class ItemPiece : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Image itemIcon;
+
     void Start()
     {
         
     }
 
-    // Update is called once per frame
+    public void Init()
+    {
+        itemIcon = GetComponentInChildren<Image>();
+    }
+
     void Update()
     {
         

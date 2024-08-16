@@ -4,30 +4,34 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PiUI : MonoBehaviour
 {
     public int pieceCount = 4;
     public GameObject piPiece;
     private List<PiPiece> piPieces = new List<PiPiece>();
+    private int currentPieceNum = 0;
 
-    // Start is called before the first frame update
+    public PiData[] piDatas;
+
     void Start()
     {
         Init();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        UpdateUIScale();
+        if (Input.GetMouseButtonUp(0))
+            SelectPiece(currentPieceNum);
 
-        foreach (PiPiece pi in piPieces)
+
+        UpdateUIScale();
+        for(int i = 0; i < piPieces.Count; i++)
         {
-            if (pi.gameObject.activeInHierarchy)
-            {
-                pi.MouserPosUpdate();
-            }
+            piPieces[i].MouserPosUpdate();
+            if (piPieces[i].IsSelected())
+                currentPieceNum = i;
         }
     }
 
@@ -42,6 +46,7 @@ public class PiUI : MonoBehaviour
             piece.transform.SetParent(transform);
             piece.Init();
             piece.SetUIRotation(new Vector3(0, 0, z));
+            piece.SetAngleRange(360.0f / pieceCount);
 
             float amount = 1.0f / pieceCount;
             piece.SetImageFillAmount(amount);
@@ -52,5 +57,16 @@ public class PiUI : MonoBehaviour
     void UpdateUIScale()
     {
         this.transform.localScale = new Vector3((float)Screen.width / (1920 / 4), (float)Screen.height / (1080 / 4), 1);
+    }
+
+    void SelectPiece(int InPiPieceNum)
+    {
+        Debug.Log(InPiPieceNum);
+    }
+
+    [System.Serializable]
+    public class PiData
+    {
+        public Sprite imageSprite;
     }
 }
