@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObstacleSpike : MonoBehaviour
+public class ObstacleSpike : Obstacle
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void OnCollisionEnter(Collision collision)
     {
-        
+        // 플레이어에게 데미지를 전달한다.
+        throw new System.NotImplementedException();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

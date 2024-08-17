@@ -3,54 +3,77 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlatformWeightInfluenced : Platform
 {
     [Header("WeightInflueneced")]
     const float maxFallYpos = 5.0f;
     const float fallingSpeed = 3.0f;
-    const float minRideTime = 1.0f;
+    const float minRidingTime = 0.5f;
+
+    WaitUntil ridingTimeOver;
 
     [SerializeField]
-    float rideTime;
+    float ridingTime;
     [SerializeField]
     bool isGetOnPlatform = false;
     [SerializeField]
     bool isRunToGetOnEvent = false;
-   
-
 
     protected override IEnumerator GetOnEvent()
     {
+        bool isReachedPos = false;
         isRunToGetOnEvent = true;
-        rideTime = 0;
 
-        while (isGetOnPlatform)
+        while (isGetOnPlatform && !isReachedPos)
         {
             yield return null;
-            rideTime += Time.deltaTime;
+            if (transform.position.y <= InitPlatformPos.y - maxFallYpos) { isReachedPos = true;}
             transform.Translate(Vector3.down * Time.deltaTime * fallingSpeed);
-            if (transform.position.y <= InitPlatformPos.y - maxFallYpos) { break; }
         }
+        
+        isReachedPos = false;
 
-        while (!isGetOnPlatform)
+        yield return ridingTimeOver;
+
+        while (!isGetOnPlatform && !isReachedPos )
         {
             yield return null;
+            if (transform.position.y >= InitPlatformPos.y) { isReachedPos = true;}
             transform.Translate(Vector3.up * Time.deltaTime * fallingSpeed);
-            if(transform.position.y >= InitPlatformPos.y) { break; }
         }   
 
         isRunToGetOnEvent = false;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    IEnumerator RidingTimer()
     {
-        isGetOnPlatform = true;
-        if (!isRunToGetOnEvent)  StartCoroutine(GetOnEvent());
+        while(!isGetOnPlatform)
+        {
+            yield return null;
+            ridingTime += Time.deltaTime;
+        }
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        ridingTimeOver = new WaitUntil(() => ridingTime > minRidingTime);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        isGetOnPlatform = true;
+        if (!isRunToGetOnEvent)
+        {
+            ridingTime = 0;
+            StartCoroutine(GetOnEvent());
+        }
+    }
     private void OnCollisionExit(Collision collision)
     {
-        if(rideTime > 1)  isGetOnPlatform = false;
+        isGetOnPlatform = false;
+        StartCoroutine(RidingTimer());
     }
 }
