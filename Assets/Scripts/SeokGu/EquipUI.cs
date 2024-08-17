@@ -1,22 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using static UIManager;
 
 public class EquipUI : MonoBehaviour
 {
     private GameObject itemPiecePrefab;
     private ItemPiece itemPiece;
 
+    public PiData defaultData;
+
     void Start()
     {
         itemPiecePrefab = GameObject.Find("ItemPiece");
         itemPiece = itemPiecePrefab.GetComponent<ItemPiece>();
+        itemPiece.itemIcon.sprite = defaultData.imageSprite;
+        itemPiece.itemIcon.color = defaultData.imageColor;
     }
 
-    public void ChangeIcon(Sprite InSprite)
+    public void ChangeIcon(PiData piData)
     {
-        itemPiece.itemIcon.sprite = InSprite;
-        itemPiece.itemIcon.color = new Color(1, 1, 1, 1);
+        itemPiece.itemIcon.sprite = piData.imageSprite;
+        itemPiece.itemIcon.color = piData.imageColor;
     }
 }

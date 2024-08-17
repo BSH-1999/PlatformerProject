@@ -1,10 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.UI;
+using static UIManager;
 
 public class PiUI : MonoBehaviour
 {
@@ -13,6 +11,7 @@ public class PiUI : MonoBehaviour
     private List<PiPiece> piPieces = new List<PiPiece>();
     private int currentPieceNum = 0;
 
+    public PiData defaultData;
     public PiData[] piDatas;
 
     void Start()
@@ -54,6 +53,8 @@ public class PiUI : MonoBehaviour
 
             if (i < piDatas.Length)
                 piece.SetData(piDatas[i]);
+            else
+                piece.SetData(defaultData);
         }
     }
 
@@ -65,11 +66,5 @@ public class PiUI : MonoBehaviour
     void SelectPiece(int InPiPieceNum)
     {
         piPieces[InPiPieceNum].OnClicked();
-    }
-
-    [System.Serializable]
-    public class PiData
-    {
-        public Sprite imageSprite;
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static PiUI;
+using static UIManager;
 
 public class PiPiece : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class PiPiece : MonoBehaviour
     private GameObject equipUiPrefab;
     private ItemPiece itemPiece;
     private EquipUI equipUI;
+    private PiData thisData;
 
     private float angleRange;
     private bool bSelect = false;
@@ -35,8 +36,9 @@ public class PiPiece : MonoBehaviour
 
     public void SetData(PiData piData)
     {
+        thisData = piData;
         itemPiece.itemIcon.sprite = piData.imageSprite;
-        itemPiece.itemIcon.color = new Color(1, 1, 1, 1);
+        itemPiece.itemIcon.color = piData.imageColor;
         bData = true;
     }
 
@@ -82,7 +84,7 @@ public class PiPiece : MonoBehaviour
 
     public void OnClicked()
     {
-        equipUI.ChangeIcon(itemPiece.itemIcon.sprite);
+        equipUI.ChangeIcon(thisData);
     }
 
     public bool IsSelected() { return bSelect; }
