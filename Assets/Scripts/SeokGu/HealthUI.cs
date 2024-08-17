@@ -7,7 +7,7 @@ public class HealthUI : MonoBehaviour
     public int pieceCount = 3;
     public float currentHealth = 3;
     public float distance = 120.0f;
-    public bool bDebug = false;
+    public bool bDebug = true;
 
     public GameObject healthPiece;
 
