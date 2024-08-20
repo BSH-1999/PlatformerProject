@@ -170,7 +170,7 @@ public class MonsterMoveControl : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
-            player.gameObject.GetComponent<PlayerControl>().TakeDamage(0.5f);
+            player.gameObject.GetComponent<PlayerControl>().hp.TakeDamage(0.5f);
         else if (collision.gameObject.CompareTag("Bullet"))
         {
             health--;

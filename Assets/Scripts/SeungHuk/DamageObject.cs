@@ -13,7 +13,7 @@ public class DamageObject : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             player = other.gameObject.GetComponent<PlayerControl>();
-            player.TakeDamage(damage);
+            player.hp.TakeDamage(damage);
             // 충돌한 오브젝트를 파괴
             Destroy(this.gameObject);
         }

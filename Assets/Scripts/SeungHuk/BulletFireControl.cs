@@ -17,6 +17,7 @@ public class BulletFireControl : MonoBehaviour
             Debug.Log("발사완료");
             Vector3 pos = new Vector3(transform.position.x, transform.position.y, transform.position.z);
             // 총알을 발사할 위치에서 총알을 생성합니다.
+
             GameObject bullet = Instantiate(bulletPrefab, pos, transform.rotation);
 
             // 총알의 Rigidbody를 얻고 방향을 설정합니다.
@@ -32,8 +33,11 @@ public class BulletFireControl : MonoBehaviour
                 // 좌우 방향 값은 실제로 밀리는 방향으로 줘 ( 나중에 앞으로 나아가면서 베는 동작 등이 나올 수 있기 때문 )
                 // 방향과 힘의 크기를 받은 플레이어에서 힘을 주는데, 그 방향은 x, y축으로만 적용시켜서 Rigid에 적용시키면
                 // Z축으로 튀는 일은 없을 듯?
+
                 player.Rebound(10f);
-                bulletRb.velocity = transform.right * 20f; // 속도 조정
+                Vector3 direction = transform.right * 20f; // 속도 조정
+                bulletRb.velocity = direction;
+
             }
         }
     }

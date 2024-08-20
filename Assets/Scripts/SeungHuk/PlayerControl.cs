@@ -1,14 +1,55 @@
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
+using static Player.PlayerControl;
+using static UIManager;
 
 namespace Player
 {
+    #region Health Class
+    public class Health
+    {
+        public float health;
+        public GameObject healthUIPrefab;
+        public HealthUI healthUI;
+        public Health()
+        {
+            health = 3f;
+            healthUIPrefab = GameObject.Find("HealthUI");
+            healthUI = healthUIPrefab.GetComponent<HealthUI>();
+            healthUI.currentHealth = health;
+            Debug.Log("나 셋팅 됨");
+        }
+
+        public void Heal(float heal)
+        {
+            if (health < 3f)
+            {
+                health += heal;
+                healthUI.currentHealth = health;
+                Debug.Log("체력 증가!");
+            }
+            else
+            {
+                Debug.Log("이미 풀피야!");
+            }
+        }
+        public void TakeDamage(float damage)
+        {
+            health -= damage;
+            healthUI.currentHealth = health;
+            Debug.Log("체력 감소!");
+        }
+        public void HealthControl()
+        {
+            if (health <= 0)
+                Debug.Log("게임 오버!");
+        }
+    }
     public class PlayerControl : PlayerAnimator
     {
-        #region 변수 및 초기화 함수  
 
-        private GameObject healthUIPrefab;
-        private HealthUI healthUI;
+        #endregion
+        #region 변수 및 초기화 함수 
 
         public bool isGround;                   //땅에 있는지?
         public bool isSprint;                   //달리는 중인지?
@@ -24,7 +65,7 @@ namespace Player
         public float groundCheckCount;          //땅을 제대로 밟고 있는지 (무작정 연타시 공중에서 1단점프추가로 가능하여 공중 점프 막기 용)
         public bool doubleJump;                 //더블점프 능력 보유 여부
         public bool isDoubleJump;               //더블점프했는지 여부
-        public float health;                      //체력
+        public Health hp;                      //체력
         public int invincibilityTime;           //무적 시간
         public Quaternion rightRotation;           //오른쪽 보는 방향
         public Quaternion leftRotation;            //왼쪽 보는 방향
@@ -36,13 +77,17 @@ namespace Player
         public int haveStoneCount;
         public ThrowStoneController throwStone;
         public float stoneThrowPower;
+        public bool isRolling;
+        float rollingTimer;
         protected virtual void InitilizeController() //초기 값 로드
         {
+            rollingTimer = 0f;
+            isRolling = false;
             stoneThrowPower = 10f;
             haveStoneCount = 10;
             slot = 1;
             curslot = 1;
-            health = 3;
+            //health = 3;
             isGround = true;
             isSprint = true;
             input = new Vector3(0, 0, 0);
@@ -53,13 +98,14 @@ namespace Player
             //turnSpeed = 600.0f;
             speed = 7f;
             sprint = 0f;
-            jumpPower = 15f;
+            jumpPower = 25f;
             playerRigidBody = GetComponent<Rigidbody>();
             animator = GetComponent<Animator>();
             animator.applyRootMotion = false; // 애니메이션이 캐릭터의 위치와 회전을 변경하지 않도록 설정
             rightRotation = Quaternion.Euler(0, 90, 0);
             leftRotation = Quaternion.Euler(0, 270, 0);
             SlotReset();
+            hp = new Health();
         }
 
         #endregion 
@@ -71,44 +117,38 @@ namespace Player
 
         private void Start()
         {
-            healthUIPrefab = GameObject.Find("HealthUI");
-            healthUI = healthUIPrefab.GetComponent<HealthUI>();
         }
 
         public void UpdateControll()
         {
             CheckGround();
-            Move();
             UpdateAnimator();
-            HealthControl();
+            //HealthControl();
             RotationPlayer();
-            SlotCheck();
+            if (isRolling == true)
+                DoRolling();
+            else
+                Move();
             if (gun.gameObject.activeSelf)
                 gun.GunCheck();
         }
 
-        void SlotCheck()
+        public void SlotCheck(ItemList inItem)
         {
-            if(slot != curslot)
+            SlotReset();
+            switch (inItem)
             {
-                SlotReset();
-                curslot = slot;
-                switch (slot)
-                {
-                    case 1:
-                        Debug.Log("1번 슬롯!");
-                        break;
-                    case 2:
-                        Debug.Log("2번 슬롯! 총 장착!");
-                        TakeGun(); break;
-                    case 3:
-                        Debug.Log("3번 슬롯!");
-                        StoneSet();
-                        break;
-                    default:
-                        break;
-
-                }
+                case ItemList.None:
+                    Debug.Log("1번 슬롯!");
+                    break;
+                case ItemList.Stone:
+                    Debug.Log("3번 슬롯!");
+                    StoneSet();
+                    break;
+                case ItemList.Gun:
+                    Debug.Log("2번 슬롯! 총 장착!");
+                    TakeGun();
+                    break;
             }
         }
         void RotationPlayer()
@@ -162,7 +202,7 @@ namespace Player
         }
         public void AddGravity()
         {
-            playerRigidBody.AddForce(Vector3.down * 5f, ForceMode.Force);
+            playerRigidBody.AddForce(Vector3.down * 4f, ForceMode.Force);
         }
         void CheckGround()
         {
@@ -188,24 +228,7 @@ namespace Player
             }
         }
 
-        void HealthControl()
-        {
-            if (health <= 0)
-                Debug.Log("게임 오버!");
-        }
-        public void TakeDamage(float damage)
-        {
-            health -= damage;
-            healthUI.currentHealth = health;
-            Debug.Log("체력 감소!");
-        }
 
-        public void Heal(float heal)
-        {
-            health += heal;
-            healthUI.currentHealth = health;
-            Debug.Log("체력 증가!");
-        }
         public void SlotReset()
         {
             gun.Reset();
@@ -243,6 +266,19 @@ namespace Player
             throwStone.Throw(stoneThrowPower, isPlayerSeeLeft);
             if (haveStoneCount == 0)
                 handStone.ResetStone(false);
+        }
+
+        public void DoRolling()
+        {
+            //Debug.Log("구르기");
+            rollingTimer += Time.deltaTime;
+            playerRigidBody.MovePosition(playerRigidBody.position + input * Time.deltaTime * 30f);
+            if (rollingTimer > 0.3f || !isGround)
+            {
+                isRollinga = false;
+                isRolling = false;
+                rollingTimer = 0f;
+            }
         }
     }
 }

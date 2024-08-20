@@ -13,6 +13,7 @@ namespace Player
         public bool isGrounded;
         public bool isRunning;
         public bool IsEquipedGun;
+        public bool isRollinga;
 
 
         #endregion  
@@ -28,6 +29,7 @@ namespace Player
             animator.SetBool(vAnimatorParameters.IsSprinting, isSprinting);
             animator.SetBool(vAnimatorParameters.IsGrounded, isGrounded);
             animator.SetBool(vAnimatorParameters.IsEquipGun, IsEquipedGun);
+            animator.SetBool(vAnimatorParameters.IsRolling, isRollinga);
         }
         //void SetGunAnimation()
         //{
@@ -43,6 +45,7 @@ namespace Player
         public static int IsRunning = Animator.StringToHash("IsRunning");
         public static int IsSprinting = Animator.StringToHash("IsSprinting");
         public static int IsEquipGun = Animator.StringToHash("IsEquipGun");
+        public static int IsRolling = Animator.StringToHash("IsRolling");
     }
 
 }

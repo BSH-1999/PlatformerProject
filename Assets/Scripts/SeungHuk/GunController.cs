@@ -19,8 +19,8 @@ public class GunController : MonoBehaviour
     {
         maxBullet = 6;
         //currentPitch = 0f;
-        maxAngle = -30f;
-        minAngle = -150f;
+        maxAngle = 30f;
+        minAngle = -180f;
         sensitivity = 500f;
 
         mainCamera = Camera.main; // 메인 카메라를 가져옵니다.

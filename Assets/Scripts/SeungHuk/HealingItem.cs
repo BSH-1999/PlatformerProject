@@ -28,7 +28,7 @@ public class HealingItem : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             player = other.gameObject.GetComponent<PlayerControl>();
-            player.Heal(heal);
+            player.hp.Heal(heal);
             // 충돌한 오브젝트를 파괴
             Destroy(this.gameObject);
         }

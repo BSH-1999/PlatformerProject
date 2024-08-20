@@ -14,9 +14,11 @@ namespace Player
         public KeyCode strafeInput = KeyCode.Tab;
         public KeyCode sprintInput = KeyCode.LeftShift;
         public KeyCode reloadGun = KeyCode.R;
+        public KeyCode rolling = KeyCode.C;
         public KeyCode slot1 = KeyCode.Alpha1;
         public KeyCode slot2 = KeyCode.Alpha2;
         public KeyCode slot3 = KeyCode.Alpha3;
+        public bool useUi;
         public BulletFireControl bullet;
         public CameraMoveControl cam;
         public GunController gun;
@@ -29,15 +31,21 @@ namespace Player
         //[HideInInspector] public vThirdPersonCamera tpCamera;
         //[HideInInspector] public Camera cameraMain;
 
-
+        // UI
+        private UIManager uiManager;
+        private PiUI piUI;
+        private EquipUI equipUI;
 
 
         #endregion
-        
+
 
         protected virtual void InitilizeController() //초기 값 로드
         {
             cc = GetComponent<PlayerControl>();
+            uiManager = gameObject.GetComponentInChildren<UIManager>();
+            piUI = uiManager.GetComponentInChildren<PiUI>();
+            equipUI = uiManager.GetComponentInChildren<EquipUI>();
         }
 
         void Start()
@@ -65,17 +73,21 @@ namespace Player
         }
         void SlotChange()
         {
-            if (Input.GetKeyUp(slot1))
+            if (Input.GetMouseButtonUp(0) && useUi)//왼클릭
             {
-                cc.slot = 1;
+                piUI.SelectItem();
+                cc.SlotCheck(equipUI.currentItem);
             }
-            if (Input.GetKeyUp(slot2))
+
+            if (Input.GetKey(KeyCode.Tab))
             {
-                cc.slot = 2;
+                useUi = true;
+                uiManager.ShowPiUI(true);
             }
-            if (Input.GetKeyUp(slot3))
+            else
             {
-                cc.slot = 3;
+                useUi = false;
+                uiManager.ShowPiUI(false);
             }
         }
 
@@ -94,6 +106,11 @@ namespace Player
         {
             cc.input.x = Input.GetAxis(horizontalInput);
             cc.input.z = Input.GetAxis(verticallInput);
+            if (Input.GetKeyDown(rolling) && cc.isGround && !cc.isRolling)
+            {
+                cc.isRolling = true;
+                cc.isRollinga = true;
+            }
         }
         protected virtual void SprintInput()
         {
@@ -120,11 +137,11 @@ namespace Player
             }
 
             // 돌 던지기
-            if (Input.GetButtonDown("Fire1") && cc.slot == 3)
+            if (Input.GetButtonDown("Fire1") && cc.handStone.gameObject.activeSelf)
             {
                 Debug.Log("돌 던지기 시도");
-                if(cc.handStone.gameObject.activeSelf)
-                    cc.ThrowStone();
+
+                cc.ThrowStone();
             }
         }
         void GunReLoad()
