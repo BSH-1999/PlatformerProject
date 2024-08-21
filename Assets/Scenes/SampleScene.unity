@@ -1405,9 +1405,9 @@ Transform:
   m_GameObject: {fileID: 510707487}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.220001, y: 0, z: -3.37}
-  m_LocalScale: {x: 2, y: 2, z: 5}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 35.3, y: 0, z: -3.37}
+  m_LocalScale: {x: 10, y: 10, z: 25}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2033,6 +2033,7 @@ MonoBehaviour:
   isRunning: 0
   IsEquipedGun: 0
   isRollinga: 0
+  isDead: 0
   isGround: 0
   isSprint: 0
   speed: 0

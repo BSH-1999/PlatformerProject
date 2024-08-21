@@ -11,12 +11,15 @@ namespace Player
         public float health;
         public GameObject healthUIPrefab;
         public HealthUI healthUI;
+        public PlayerControl player;
+        
         public Health()
         {
             health = 3f;
             healthUIPrefab = GameObject.Find("HealthUI");
             healthUI = healthUIPrefab.GetComponent<HealthUI>();
             healthUI.currentHealth = health;
+            player = GameObject.Find("Guy").GetComponent<PlayerControl>();
             Debug.Log("나 셋팅 됨");
         }
 
@@ -38,11 +41,11 @@ namespace Player
             health -= damage;
             healthUI.currentHealth = health;
             Debug.Log("체력 감소!");
-        }
-        public void HealthControl()
-        {
             if (health <= 0)
+            {
+                player.isDead = true;
                 Debug.Log("게임 오버!");
+            }
         }
     }
     public class PlayerControl : PlayerAnimator
